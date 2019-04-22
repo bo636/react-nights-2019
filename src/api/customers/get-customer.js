@@ -5,5 +5,5 @@ export const getCustomerById = async customerId => {
     method: 'GET',
   })
   // todo process response into our customer structure
-  return response
+  return response.data
 }

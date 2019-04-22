@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Formik } from 'formik'
 
-import Layout from '../../components/Layout'
+import { Layout } from '../../components/Layout'
 import { H1 } from '../../components/Typography'
 import { Form, GlobalFormError } from '../../components/Form'
 import { Input } from '../../components/Input'
@@ -12,9 +12,7 @@ import { getCustomerById } from '../../api/customers/get-customer'
 import { connect } from 'react-redux'
 import { setCustomer } from '../../store/customer/actions'
 
-class LogInComponent extends Component
-
-{
+class LogInComponent extends Component {
   state = {
     globalError: '',
   }
@@ -28,9 +26,7 @@ class LogInComponent extends Component
     try {
       setSubmitting(true)
       const ownerId = await logIn(values.email, values.password)
-      console.log(ownerId)
       const customerJson = await getCustomerById(ownerId)
-      console.log('customerDetail:' + JSON.stringify(customerJson))
       this.props.setCustomer(customerJson)
       this.props.history.push('/account')
     } catch (error) {
@@ -70,17 +66,12 @@ class LogInComponent extends Component
   }
 }
 
-
-const mapStateToProps = state => ({
-  state
-})
-
 const mapDispatchToProps = {
   setCustomer,
 }
 
 const LogIn = connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(LogInComponent)
 

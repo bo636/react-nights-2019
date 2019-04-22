@@ -26,9 +26,9 @@ export const createCustomer = async ({ email, password, firstName }) => {
     } = response
 
     const ownerId = await logIn(email, password)
-    console.log(ownerId)
 
     return {
+      ownerId,
       email: attributes.email,
       firstName: attributes.metadata.firstName,
     }

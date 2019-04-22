@@ -4,7 +4,7 @@ import { getToken } from '../utils/token'
 
 export const api = async (url, options) => {
   let token = getToken()
-  if (!token || token === undefined || token === 'undefined') {
+  if (!token || token === 'undefined') {
     token = await getGuestToken()
   }
 

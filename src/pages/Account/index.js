@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import Layout from '../../components/Layout'
+import { Layout } from '../../components/Layout'
 import { H1 } from '../../components/Typography'
 
 class Account extends Component {

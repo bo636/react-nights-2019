@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 import Button from '../../components/Button'
 import Loader from '../../components/Loader'
-import Layout from '../../components/Layout'
+import { Layout } from '../../components/Layout'
 import { H1 } from '../../components/Typography'
 import { getProductById } from '../../api/products/get-product'
 import { loadProduct } from '../../store/products/actions'

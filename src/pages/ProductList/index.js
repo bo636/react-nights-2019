@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import Layout from '../../components/Layout'
+import { Layout } from '../../components/Layout'
 import Loader from '../../components/Loader'
 import { H1 } from '../../components/Typography'
 

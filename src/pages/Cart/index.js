@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import Button from '../../components/Button'
-import Layout from '../../components/Layout'
+import { Layout } from '../../components/Layout'
 import { H1 } from '../../components/Typography'
 import { removeProduct } from '../../store/cart/actions'
 
