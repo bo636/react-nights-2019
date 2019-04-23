@@ -11,6 +11,7 @@ export const getGuestToken = async () => {
       grant_type: 'client_credentials',
       client_id: config.clientId,
       scope: config.scope,
+      client_secret: config.clientSecret,
     }),
   })
 
