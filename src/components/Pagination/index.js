@@ -9,7 +9,16 @@ import { List, ListItem } from './styled'
 
 const renderPaginationItem = number => (
   <ListItem key={number}>
-    <Link to={`${routes.PRODUCT_LIST}?page=${number}`}>{number}</Link>
+    <Link
+      to={
+        `${routes.PRODUCT_LIST}?${routes.PAGE_KEYWORD}${number}` +
+        routes.PAGE_SIZE_KEYWORD +
+        '=' +
+        30
+      }
+    >
+      {number}
+    </Link>
   </ListItem>
 )
 

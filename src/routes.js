@@ -9,3 +9,6 @@ export const CART = '/cart'
 export const SIGN_UP = '/signup'
 export const LOGIN = '/login'
 export const ACCOUNT = '/account'
+
+export const PAGE_SIZE_KEYWORD = 'pageSize'
+export const PAGE_KEYWORD = 'page'
