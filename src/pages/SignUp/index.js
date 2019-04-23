@@ -12,6 +12,7 @@ import { getCustomerById } from '../../api/customers/get-customer'
 import { setCustomer as setCustomerAction } from '../../store/customer/actions'
 import { connect } from 'react-redux'
 import { logIn } from '../../api/log-in'
+import * as routes from '../../routes'
 
 const SignUpComponent = ({ globalError, setCustomer, history }) => {
   const initialValues = {
@@ -30,7 +31,7 @@ const SignUpComponent = ({ globalError, setCustomer, history }) => {
       await logIn(values.email, values.password)
       const customerJson = await getCustomerById(ownerId)
       setCustomer(customerJson)
-      history.push('/account')
+      history.push(routes.ACCOUNT)
     } catch (error) {
       globalError = error.message
     }
