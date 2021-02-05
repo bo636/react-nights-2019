@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Formik } from 'formik'
 
 import { Layout } from '../../components/Layout'
@@ -10,64 +10,58 @@ import { schema } from './schema'
 import { logIn } from '../../api/log-in'
 import { getCustomerById } from '../../api/customers/get-customer'
 import { connect } from 'react-redux'
-import { setCustomer } from '../../store/customer/actions'
+import { setCustomer as setCustomerAction } from '../../store/customer/actions'
+import * as routes from '../../routes'
 
-class LogInComponent extends Component {
-  state = {
-    globalError: '',
-  }
-
-  initialValues = {
+const LogInComponent = ({ globalError, setCustomer, history }) => {
+  const initialValues = {
     email: '',
     password: '',
   }
 
-  handleSubmit = async (values, { setSubmitting }) => {
+  let isSubmitting = false
+
+  const handleSubmit = async values => {
     try {
-      setSubmitting(true)
+      isSubmitting = true
       const ownerId = await logIn(values.email, values.password)
       const customerJson = await getCustomerById(ownerId)
-      this.props.setCustomer(customerJson)
-      this.props.history.push('/account')
+      setCustomer(customerJson)
+      history.push(routes.ACCOUNT)
     } catch (error) {
-      this.setState({
-        globalError: error.message,
-      })
+      console.log('handleSubmit error' + error.message)
+      globalError = error.message
     }
-    setSubmitting(false)
+    isSubmitting = false
   }
 
-  render() {
-    const { globalError } = this.state
-
-    return (
-      <Layout>
-        <H1 textAlign="center">Log in</H1>
-        <Formik
-          initialValues={this.initialValues}
-          validationSchema={schema}
-          onSubmit={this.handleSubmit}
-        >
-          {({ handleSubmit, isSubmitting }) => (
-            <Form onSubmit={handleSubmit}>
-              {Boolean(globalError) && (
-                <GlobalFormError>{globalError}</GlobalFormError>
-              )}
-              <Input name="email" type="email" label="Email address" />
-              <Input name="password" type="password" label="Password" />
-              <Button disabled={isSubmitting}>
-                {isSubmitting ? 'Logging In...' : 'Log In'}
-              </Button>
-            </Form>
-          )}
-        </Formik>
-      </Layout>
-    )
-  }
+  return (
+    <Layout>
+      <H1 textAlign="center">Log in</H1>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={schema}
+        onSubmit={handleSubmit}
+      >
+        {props => (
+          <Form onSubmit={props.handleSubmit}>
+            {Boolean(globalError) && (
+              <GlobalFormError>{globalError}</GlobalFormError>
+            )}
+            <Input name="email" type="email" label="Email address" />
+            <Input name="password" type="password" label="Password" />
+            <Button disabled={isSubmitting}>
+              {isSubmitting ? 'Logging In...' : 'Log In'}
+            </Button>
+          </Form>
+        )}
+      </Formik>
+    </Layout>
+  )
 }
 
 const mapDispatchToProps = {
-  setCustomer,
+  setCustomer: setCustomerAction,
 }
 
 const LogIn = connect(

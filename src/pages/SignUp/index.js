@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Formik } from 'formik'
 
 import { createCustomer } from '../../api/customers/create-customer'
@@ -9,75 +9,68 @@ import { Input } from '../../components/Input'
 import Button from '../../components/Button'
 import { schema } from './schema'
 import { getCustomerById } from '../../api/customers/get-customer'
-import { setCustomer } from '../../store/customer/actions'
+import { setCustomer as setCustomerAction } from '../../store/customer/actions'
 import { connect } from 'react-redux'
 import { logIn } from '../../api/log-in'
+import * as routes from '../../routes'
 
-class SignUpComponent extends Component {
-  state = {
-    globalError: '',
-  }
-
-  initialValues = {
+const SignUpComponent = ({ globalError, setCustomer, history }) => {
+  const initialValues = {
     firstName: '',
     email: '',
     password: '',
     passwordConfirm: '',
   }
 
-  handleSubmit = async (values, { setSubmitting }) => {
+  let isSubmitting = false
+
+  const handleSubmit = async (values, { setSubmitting }) => {
     try {
       setSubmitting(true)
       const { ownerId } = await createCustomer(values)
       await logIn(values.email, values.password)
       const customerJson = await getCustomerById(ownerId)
-      this.props.setCustomer(customerJson)
-      this.props.history.push('/account')
+      setCustomer(customerJson)
+      history.push(routes.ACCOUNT)
     } catch (error) {
-      this.setState({
-        globalError: error.message,
-      })
+      globalError = error.message
     }
     setSubmitting(false)
   }
 
-  render() {
-    const { globalError } = this.state
-
-    return (
-      <Layout>
-        <H1 textAlign="center">Sign Up</H1>
-        <Formik
-          initialValues={this.initialValues}
-          validationSchema={schema}
-          onSubmit={this.handleSubmit}
-        >
-          {({ handleSubmit, isSubmitting }) => (
-            <Form onSubmit={handleSubmit}>
-              {Boolean(globalError) && (
-                <GlobalFormError>{globalError}</GlobalFormError>
-              )}
-              <Input name="firstName" label="First name" />
-              <Input name="email" type="email" label="Email address" />
-              <Input name="password" type="password" label="Password" />
-              <Input
-                name="passwordConfirm"
-                type="password"
-                label="Confirm password"
-              />
-              <Button disabled={isSubmitting}>
-                {isSubmitting ? 'Signing Up...' : 'Sign Up'}
-              </Button>
-            </Form>
-          )}
-        </Formik>
-      </Layout>
-    )
-  }
+  return (
+    <Layout>
+      <H1 textAlign="center">Sign Up</H1>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={schema}
+        onSubmit={handleSubmit}
+      >
+        {props => (
+          <Form onSubmit={props.handleSubmit}>
+            {Boolean(globalError) && (
+              <GlobalFormError>{globalError}</GlobalFormError>
+            )}
+            <Input name="firstName" label="First name" />
+            <Input name="email" type="email" label="Email address" />
+            <Input name="password" type="password" label="Password" />
+            <Input
+              name="passwordConfirm"
+              type="password"
+              label="Confirm password"
+            />
+            <Button disabled={isSubmitting}>
+              {isSubmitting ? 'Signing Up...' : 'Sign Up'}
+            </Button>
+          </Form>
+        )}
+      </Formik>
+    </Layout>
+  )
 }
 
 const mapDispatchToProps = {
-  setCustomer,
+  setCustomer: setCustomerAction,
 }
 
 const SignUp = connect(
